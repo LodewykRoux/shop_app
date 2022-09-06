@@ -8,46 +8,41 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: GridTile(
-        footer: GridTileBar(
-          leading: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.favorite,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-          backgroundColor: Colors.black87,
-          title: Text(
-            product.title,
-            textAlign: TextAlign.center,
-          ),
-          trailing: IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              color: Theme.of(context).accentColor,
-            ),
-            onPressed: () {},
+    return GridTile(
+      footer: GridTileBar(
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.favorite,
+            color: Theme.of(context).accentColor,
           ),
         ),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ProductDetailScreen(
-                  product: product,
-                ),
-              ),
-            );
-          },
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
+        backgroundColor: Colors.black87,
+        title: Text(
+          product.title,
+          textAlign: TextAlign.center,
+        ),
+        trailing: IconButton(
+          icon: Icon(
+            Icons.shopping_cart,
+            color: Theme.of(context).accentColor,
           ),
+          onPressed: () {},
+        ),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ProductDetailScreen(
+                product: product,
+              ),
+            ),
+          );
+        },
+        child: Image.network(
+          product.imageUrl,
+          fit: BoxFit.cover,
         ),
       ),
     );

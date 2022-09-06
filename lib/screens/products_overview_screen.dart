@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:shop_app/models/product.dart';
 import 'package:shop_app/widgets/product_item.dart';
@@ -40,6 +42,14 @@ class ProductsOverviewScreen extends StatelessWidget {
     ),
   ];
 
+  final List<Map> _products = List.generate(
+      100,
+      (index) => {
+            "id": index,
+            "name": "Product $index",
+            "price": Random().nextInt(100)
+          }).toList();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,20 +61,15 @@ class ProductsOverviewScreen extends StatelessWidget {
         children: [
           Expanded(
             child: GridView.builder(
-              shrinkWrap: true,
               itemCount: loadedProducts.length,
               padding: const EdgeInsets.all(10.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 10,
-                mainAxisExtent: 10,
-              ),
-              itemBuilder: (context, index) => SizedBox(
-                height: 200,
-                child: ProductItem(
-                  product: loadedProducts[index],
-                ),
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  childAspectRatio: 2 / 3,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20),
+              itemBuilder: (context, index) => ProductItem(
+                product: loadedProducts[index],
               ),
             ),
           ),
