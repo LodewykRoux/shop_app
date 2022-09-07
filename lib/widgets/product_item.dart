@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/models/product.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
-  final Product product;
-  const ProductItem({Key? key, required this.product}) : super(key: key);
+  const ProductItem({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Product product = Provider.of<Product>(context);
     return GridTile(
       footer: GridTileBar(
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            product.toggleFavouriteStatus();
+          },
           icon: Icon(
-            Icons.favorite,
+            product.isFavourite ? Icons.favorite : Icons.favorite_border,
             color: Theme.of(context).accentColor,
           ),
         ),
