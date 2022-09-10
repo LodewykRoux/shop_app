@@ -8,44 +8,46 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Product product = Provider.of<Product>(context);
-    return GridTile(
-      footer: GridTileBar(
-        leading: IconButton(
-          onPressed: () {
-            product.toggleFavouriteStatus();
-          },
-          icon: Icon(
-            product.isFavourite ? Icons.favorite : Icons.favorite_border,
-            color: Theme.of(context).accentColor,
-          ),
-        ),
-        backgroundColor: Colors.black87,
-        title: Text(
-          product.title,
-          textAlign: TextAlign.center,
-        ),
-        trailing: IconButton(
-          icon: Icon(
-            Icons.shopping_cart,
-            color: Theme.of(context).accentColor,
-          ),
-          onPressed: () {},
-        ),
-      ),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ProductDetailScreen(
-                product: product,
-              ),
+    // Product product = Provider.of<Product>(context);
+    return Consumer<Product>(
+      builder: (context, product, child) => GridTile(
+        footer: GridTileBar(
+          leading: IconButton(
+            onPressed: () {
+              product.toggleFavouriteStatus();
+            },
+            icon: Icon(
+              product.isFavourite ? Icons.favorite : Icons.favorite_border,
+              color: Theme.of(context).accentColor,
             ),
-          );
-        },
-        child: Image.network(
-          product.imageUrl,
-          fit: BoxFit.cover,
+          ),
+          backgroundColor: Colors.black87,
+          title: Text(
+            product.title,
+            textAlign: TextAlign.center,
+          ),
+          trailing: IconButton(
+            icon: Icon(
+              Icons.shopping_cart,
+              color: Theme.of(context).accentColor,
+            ),
+            onPressed: () {},
+          ),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ProductDetailScreen(
+                  product: product,
+                ),
+              ),
+            );
+          },
+          child: Image.network(
+            product.imageUrl,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
