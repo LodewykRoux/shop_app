@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart_provider.dart';
 import 'package:shop_app/providers/product_provider.dart';
+import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/widgets/badge.dart';
 import 'package:shop_app/widgets/product_grid.dart';
 
@@ -50,7 +51,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           Consumer<CartProvider>(
             child: IconButton(
               icon: const Icon(Icons.shopping_cart),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const CartScreen(),
+                ));
+              },
             ),
             builder: (context, cartData, child) => Badge(
               value: cartData.itemCount.toString(),
