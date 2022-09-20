@@ -5,9 +5,11 @@ import 'package:shop_app/providers/order_provider.dart';
 import 'package:shop_app/providers/product_provider.dart';
 import 'package:shop_app/screens/products_overview_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
