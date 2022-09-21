@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/product_provider.dart';
+import 'package:shop_app/screens/edit_product_screen.dart';
 import 'package:shop_app/widgets/app_drawer.dart';
 import 'package:shop_app/widgets/user_product_item.dart';
 
@@ -20,7 +21,13 @@ class _UserProductsScreenState extends State<UserProductsScreen> {
         title: const Text('Your Products'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const EditProductScreen(),
+                ),
+              );
+            },
             icon: const Icon(Icons.add),
           ),
         ],
