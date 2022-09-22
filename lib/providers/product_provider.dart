@@ -45,8 +45,22 @@ class ProductProvider with ChangeNotifier {
     return _items.where((i) => i.isFavourite).toList();
   }
 
-  void addProduct() {
-    // _items.add(value);
+  void addProduct(Product product) {
+    Product newProduct = product.copyWith(
+      id: DateTime.now().toString(),
+    );
+    _items.add(newProduct);
+    notifyListeners();
+  }
+
+  void updateProduct(Product product) {
+    int existingProduct = _items.indexWhere((i) => i.id == product.id);
+    _items[existingProduct] = product;
+    notifyListeners();
+  }
+
+  void deleteProduct(Product product) {
+    _items.removeWhere((element) => element == product);
     notifyListeners();
   }
 

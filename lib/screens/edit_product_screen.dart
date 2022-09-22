@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/providers/product_provider.dart';
 
 class EditProductScreen extends StatefulWidget {
-  const EditProductScreen({super.key});
+  final Product? product;
+  const EditProductScreen({super.key, this.product});
 
   @override
   State<EditProductScreen> createState() => _EditProductScreenState();
@@ -23,6 +26,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.product != null) {
+      _editedProduct = widget.product!;
+      _imageUrlController.text = _editedProduct.imageUrl;
+    }
     _imageUrlFocusNode.addListener(_updateImageUrl);
   }
 
@@ -45,6 +52,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void _saveForm() {
     if (_formKey.currentState?.validate() != true) return;
     _formKey.currentState?.save();
+    final providerState = Provider.of<ProductProvider>(context, listen: false);
+    if (widget.product != null) {
+      providerState.updateProduct(_editedProduct);
+    } else {
+      providerState.addProduct(_editedProduct);
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -69,6 +83,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: _editedProduct.title,
                   decoration: const InputDecoration(labelText: 'Title'),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (_) {
@@ -79,10 +94,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                   validator: (value) {
                     if (value?.isEmpty == true) return 'Required';
-                    return '';
+                    return null;
                   },
                 ),
                 TextFormField(
+                  initialValue: _editedProduct.price.toString(),
                   focusNode: _priceFocusNode,
                   decoration: const InputDecoration(labelText: 'Price'),
                   textInputAction: TextInputAction.next,
@@ -99,10 +115,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                   validator: (value) {
                     if (value?.isEmpty == true) return 'Required';
-                    return '';
+                    if (double.tryParse(value!) == null) {
+                      return 'Invalid Number';
+                    }
+                    if (double.tryParse(value)! <= 0) {
+                      return 'Invalid Number';
+                    }
+                    return null;
                   },
                 ),
                 TextFormField(
+                  initialValue: _editedProduct.description,
                   focusNode: _descriptionFocusNode,
                   decoration: const InputDecoration(labelText: 'Description'),
                   maxLines: 3,
@@ -114,7 +137,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   },
                   validator: (value) {
                     if (value?.isEmpty == true) return 'Required';
-                    return '';
+
+                    return null;
                   },
                 ),
                 Row(
@@ -161,7 +185,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         },
                         validator: (value) {
                           if (value?.isEmpty == true) return 'Required';
-                          return '';
+                          return null;
                         },
                       ),
                     ),
