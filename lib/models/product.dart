@@ -35,6 +35,16 @@ class Product with ChangeNotifier {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'description': description,
+      'price': price,
+      'imageUrl': imageUrl,
+      'isFavourite': isFavourite,
+    };
+  }
+
   void toggleFavouriteStatus() {
     isFavourite = !isFavourite;
     notifyListeners();
