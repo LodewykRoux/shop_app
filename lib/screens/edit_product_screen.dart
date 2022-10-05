@@ -50,7 +50,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     if (_formKey.currentState?.validate() != true) return;
     setState(() {
       _isLoading = true;
@@ -60,34 +60,32 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (widget.product != null) {
       providerState.updateProduct(_editedProduct);
     } else {
-      providerState.addProduct(_editedProduct).catchError(
-        (error) {
-          return showDialog<void>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('An error occurred'),
-              content: const Text(
-                'Something went wrong',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Okay'),
-                )
-              ],
+      try {
+        await providerState.addProduct(_editedProduct);
+      } catch (e) {
+        return showDialog<void>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('An error occurred'),
+            content: const Text(
+              'Something went wrong',
             ),
-          );
-        },
-      ).then(
-        (_) {
-          setState(() {
-            _isLoading = false;
-          });
-          Navigator.of(context).pop();
-        },
-      );
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Okay'),
+              )
+            ],
+          ),
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.pop(context);
+      }
     }
   }
 

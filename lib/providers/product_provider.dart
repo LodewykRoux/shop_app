@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/product.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,29 +49,31 @@ class ProductProvider with ChangeNotifier {
     return _items.where((i) => i.isFavourite).toList();
   }
 
+  Future<void> getList() async {
+    try {
+      final response = await http.get(Constants.url);
+      print(jsonDecode(response.body));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> addProduct(Product product) async {
-    Uri url = Uri.https(
-      'shopapp-d572e-default-rtdb.europe-west1.firebasedatabase.app',
-      '/products.json',
-    );
-    Product newProduct = product.copyWith(
-      id: DateTime.now().toString(),
-    );
-    return await http
-        .post(
-      url,
-      body: json.encode(
-        newProduct.toJson(),
-      ),
-    )
-        .then(
-      (response) {
-        _items.add(newProduct);
-        notifyListeners();
-      },
-    ).catchError((error) {
-      throw error;
-    });
+    try {
+      Product newProduct = product.copyWith(
+        id: DateTime.now().toString(),
+      );
+      http.Response result = await http.post(
+        Constants.url,
+        body: json.encode(
+          newProduct.toJson(),
+        ),
+      );
+      _items.add(newProduct);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void updateProduct(Product product) {
