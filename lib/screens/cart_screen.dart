@@ -35,7 +35,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  FlatButton(
+                  TextButton(
                       onPressed: () {
                         Provider.of<OrderProvider>(context, listen: false)
                             .addOrder(
