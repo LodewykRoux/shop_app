@@ -58,7 +58,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _formKey.currentState?.save();
     final providerState = Provider.of<ProductProvider>(context, listen: false);
     if (widget.product != null) {
-      providerState.updateProduct(_editedProduct);
+      await providerState.updateProduct(_editedProduct);
     } else {
       try {
         await providerState.addProduct(_editedProduct);
@@ -86,6 +86,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
         });
         Navigator.pop(context);
       }
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 

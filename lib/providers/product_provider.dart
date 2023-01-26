@@ -77,14 +77,38 @@ class ProductProvider with ChangeNotifier {
     }
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     int existingProduct = _items.indexWhere((i) => i.id == product.id);
+    if (existingProduct >= 0) {
+      await http.patch(
+        Uri.https(
+          'shopapp-d572e-default-rtdb.europe-west1.firebasedatabase.app',
+          '/products/${product.id}.json',
+        ),
+        body: json.encode(
+          product.toJson(),
+        ),
+      );
+    }
     _items[existingProduct] = product;
     notifyListeners();
   }
 
-  void deleteProduct(Product product) {
-    _items.removeWhere((element) => element == product);
+  Future<void> deleteProduct(Product product) async {
+    int existingProduct = _items.indexWhere((i) => i.id == product.id);
+    if (existingProduct >= 0) {
+      _items.removeAt(existingProduct);
+      await http
+          .delete(
+        Uri.https(
+          'shopapp-d572e-default-rtdb.europe-west1.firebasedatabase.app',
+          '/products/${product.id}.json',
+        ),
+      )
+          .catchError((_) {
+        _items.insert(existingProduct, product);
+      });
+    }
     notifyListeners();
   }
 
