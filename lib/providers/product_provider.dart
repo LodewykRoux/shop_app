@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/models/exceptions/http_exception.dart';
 import 'package:shop_app/models/product.dart';
 import 'package:http/http.dart' as http;
 
@@ -105,7 +106,11 @@ class ProductProvider with ChangeNotifier {
           '/products/${product.id}.json',
         ),
       )
-          .catchError((_) {
+          .then((response) {
+        if (response.statusCode >= 400) {
+          throw HttpException('Could not delete product.');
+        }
+      }).catchError((_) {
         _items.insert(existingProduct, product);
       });
     }
