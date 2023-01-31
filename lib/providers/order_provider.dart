@@ -12,6 +12,44 @@ class OrderProvider with ChangeNotifier {
     return [..._orders];
   }
 
+  Future<void> fetchAndSetOrders() async {
+    final uri = Uri.https(
+      'shopapp-d572e-default-rtdb.europe-west1.firebasedatabase.app',
+      '/orders.json',
+    );
+
+    final response = await http.get(uri);
+    final List<OrderItem> loadedOrders = [];
+    final Map<String, dynamic>? extractedData =
+        json.decode(response.body) as Map<String, dynamic>?;
+    if (extractedData == null) {
+      return;
+    }
+    extractedData.forEach(
+      (orderId, orderData) {
+        loadedOrders.add(
+          OrderItem(
+            id: orderId,
+            amount: orderData['amount'],
+            orderTime: DateTime.parse(
+              orderData['dateTime'],
+            ),
+            products: (orderData['products'] as List<dynamic>)
+                .map((e) => CartItem(
+                    id: e['id'],
+                    title: e['title'],
+                    quantity: e['quantity'],
+                    price: e['price']))
+                .toList(),
+          ),
+        );
+      },
+    );
+    _orders.clear();
+    _orders.addAll(loadedOrders.reversed.toList());
+    notifyListeners();
+  }
+
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final uri = Uri.https(
       'shopapp-d572e-default-rtdb.europe-west1.firebasedatabase.app',
