@@ -53,8 +53,7 @@ class ProductProvider with ChangeNotifier {
 
   Future<void> getList() async {
     try {
-      final response = await http.get(Constants.url);
-      print(jsonDecode(response.body));
+      await http.get(Constants.url);
     } catch (e) {
       rethrow;
     }
