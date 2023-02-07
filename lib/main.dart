@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart_provider.dart';
 import 'package:shop_app/providers/order_provider.dart';
 import 'package:shop_app/providers/product_provider.dart';
+import 'package:shop_app/screens/auth_screen.dart';
 import 'package:shop_app/screens/products_overview_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepOrange,
           fontFamily: 'Lato',
         ),
-        home: ProductsOverviewScreen(),
+        home: AuthScreen(),
       ),
     );
   }
