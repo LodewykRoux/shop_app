@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_app/providers/auth_provider.dart';
 
 enum AuthMode { signup, login }
 
@@ -101,7 +103,7 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  void _submit() async {
     if (!_formKey.currentState!.validate()) {
       // Invalid!
       return;
@@ -113,7 +115,8 @@ class _AuthCardState extends State<AuthCard> {
     if (_authMode == AuthMode.login) {
       // Log user in
     } else {
-      // Sign user up
+      await Provider.of<AuthProvider>(context, listen: false)
+          .signUp(_authData['email']!, _authData['password']!);
     }
     setState(() {
       _isLoading = false;
@@ -155,8 +158,8 @@ class _AuthCardState extends State<AuthCard> {
                   decoration: const InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value != null ||
-                        value!.isEmpty ||
+                    if (value == null ||
+                        value.isEmpty ||
                         !value.contains('@')) {
                       return 'Invalid email!';
                     }
@@ -171,7 +174,7 @@ class _AuthCardState extends State<AuthCard> {
                   obscureText: true,
                   controller: _passwordController,
                   validator: (value) {
-                    if (value != null || value!.isEmpty || value.length < 5) {
+                    if (value == null || value.isEmpty || value.length < 5) {
                       return 'Password is too short!';
                     }
                     return null;
