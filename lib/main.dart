@@ -29,14 +29,17 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthProvider(),
         ),
       ],
-      child: MaterialApp(
-        title: 'MyShop',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
+      child: Consumer<AuthProvider>(
+        builder: (context, auth, _) => MaterialApp(
+          title: 'MyShop',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+          ),
+          home:
+              auth.isAuth ? const ProductsOverviewScreen() : const AuthScreen(),
         ),
-        home: const AuthScreen(),
       ),
     );
   }
