@@ -9,7 +9,9 @@ class AuthProvider with ChangeNotifier {
   DateTime? _expiryDate;
   String? _userId;
 
-  bool get isAuth => token != null;
+  bool get isAuth {
+    return token != null;
+  }
 
   String? get token {
     if (_expiryDate != null &&
@@ -42,6 +44,7 @@ class AuthProvider with ChangeNotifier {
       _userId = responseData['localId'];
       _expiryDate = DateTime.now()
           .add(Duration(seconds: int.parse(responseData['expiresIn'])));
+      notifyListeners();
     } catch (e) {
       rethrow;
     }
@@ -61,9 +64,15 @@ class AuthProvider with ChangeNotifier {
           },
         ),
       );
-      if (json.decode(response.body)['error'] != null) {
+      final responseData = json.decode(response.body);
+      if (responseData['error'] != null) {
         throw HttpException(json.decode(response.body)['error']['message']);
       }
+      _token = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expiryDate = DateTime.now()
+          .add(Duration(seconds: int.parse(responseData['expiresIn'])));
+      notifyListeners();
     } catch (e) {
       rethrow;
     }

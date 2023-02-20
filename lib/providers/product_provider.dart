@@ -43,6 +43,9 @@ class ProductProvider with ChangeNotifier {
   //   ),
   // ];
 
+  String? authToken;
+  ProductProvider(this._items, {this.authToken, });
+
   List<Product> get items {
     return [..._items];
   }
@@ -83,7 +86,7 @@ class ProductProvider with ChangeNotifier {
       await http.patch(
         Uri.https(
           'shopapp-d572e-default-rtdb.europe-west1.firebasedatabase.app',
-          '/products/${product.id}.json',
+          '/products/${product.id}.json?auth=$authToken',
         ),
         body: json.encode(
           product.toJson(),
@@ -102,7 +105,7 @@ class ProductProvider with ChangeNotifier {
           .delete(
         Uri.https(
           'shopapp-d572e-default-rtdb.europe-west1.firebasedatabase.app',
-          '/products/${product.id}.json',
+          '/products/${product.id}.json?auth=$authToken',
         ),
       )
           .then((response) {

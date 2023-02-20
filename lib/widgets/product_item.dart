@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/providers/auth_provider.dart';
 import 'package:shop_app/providers/cart_provider.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
 
@@ -10,12 +11,13 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CartProvider cart = Provider.of<CartProvider>(context, listen: false);
+    AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
     return Consumer<Product>(
       builder: (context, product, child) => GridTile(
         footer: GridTileBar(
           leading: IconButton(
             onPressed: () {
-              product.toggleFavouriteStatus();
+              product.toggleFavouriteStatus(auth.token ?? '');
             },
             icon: Icon(
               product.isFavourite ? Icons.favorite : Icons.favorite_border,

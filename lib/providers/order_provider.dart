@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 
 class OrderProvider with ChangeNotifier {
   final List<OrderItem> _orders = [];
+  final String authToken;
+
+  OrderProvider(this.authToken);
 
   List<OrderItem> get orders {
     return [..._orders];
@@ -15,7 +18,7 @@ class OrderProvider with ChangeNotifier {
   Future<void> fetchAndSetOrders() async {
     final uri = Uri.https(
       'shopapp-d572e-default-rtdb.europe-west1.firebasedatabase.app',
-      '/orders.json',
+      '/orders.json?auth=$authToken',
     );
 
     final response = await http.get(uri);
